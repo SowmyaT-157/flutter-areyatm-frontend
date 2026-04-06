@@ -1,8 +1,12 @@
+import 'package:arey_atm/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SignIn extends StatelessWidget {
-  const SignIn({super.key});
+   SignIn({super.key});
+
+ final TextEditingController _emailController = TextEditingController();
+ final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +17,16 @@ class SignIn extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const TextField(
-              decoration: InputDecoration(
-                labelText: "username",
+            TextField(
+              controller:_emailController,
+              decoration: const InputDecoration(
+                labelText: "email"
               ),
             ),
             const SizedBox(height: 16),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(
                 labelText: "password",
               ),
               obscureText: true,
@@ -28,7 +34,9 @@ class SignIn extends StatelessWidget {
             const SizedBox(height: 24),
             SizedBox(
               child: ElevatedButton(
-                onPressed: () => context.go('/homePage'),
+                onPressed: () {
+                  loginUser(_emailController.text, _passwordController.text,context);
+                },
                 child: const Text("Login"),
               ),
             ),
