@@ -10,7 +10,7 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/register',
-        builder: (context, state) => const SignUp(),
+        builder: (context, state) =>  SignUp(),
       ),
       GoRoute(
         path: '/login',
