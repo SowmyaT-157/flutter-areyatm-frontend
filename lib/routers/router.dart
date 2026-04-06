@@ -15,14 +15,13 @@ class AppRouter {
       GoRoute(
         path: '/login',
         name: 'login', 
-        builder: (context, state) => const SignIn(),
+        builder: (context, state) => SignIn(),
       ),
       GoRoute(
         path: '/homePage',
         name: 'home', 
         builder: (context, state) => const homePage(),
       ),
-
     ],
   );
 }
