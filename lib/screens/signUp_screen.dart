@@ -1,3 +1,4 @@
+import 'package:arey_atm/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 export './signUp_screen.dart';
@@ -10,6 +11,10 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,20 +23,34 @@ class _SignUpState extends State<SignUp> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const TextField(
-              decoration: InputDecoration(labelText: "first Name"),
+            TextField(
+              controller: _firstNameController,
+              decoration: const InputDecoration(labelText: "first Name"),
             ),
-            const TextField(
-              decoration: InputDecoration(labelText: "last Name"),
+            TextField(
+              controller: _lastNameController,
+              decoration: const InputDecoration(labelText: "last Name"),
             ),
-            const TextField(decoration: InputDecoration(labelText: "email")),
-            const TextField(
-              decoration: InputDecoration(labelText: "password"),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: "email"),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: "password"),
               obscureText: true,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => context.go('/login'),
+              onPressed: () {
+                createUser(
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _emailController.text,
+                  _passwordController.text,
+                  context,
+                );
+              },
               child: const Text("signUp"),
             ),
             TextButton(
@@ -44,5 +63,3 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-
-
