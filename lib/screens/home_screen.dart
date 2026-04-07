@@ -1,6 +1,7 @@
 import 'package:arey_atm/model/taskModel.dart';
 import 'package:arey_atm/services/tasksServices.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -96,6 +97,11 @@ class _HomePageState extends State<HomePage> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.go('/addReminder'),
+        label: const Text("Add Reminder"),
+        backgroundColor: const Color.fromRGBO(33, 236, 243, 1),
       ),
     );
   }
