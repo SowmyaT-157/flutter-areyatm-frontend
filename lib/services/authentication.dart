@@ -15,7 +15,6 @@ Future<void> loginUser(
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email, "password": password}),
     );
-
     if (!context.mounted) {
       return;
     }
