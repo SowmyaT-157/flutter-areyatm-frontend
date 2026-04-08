@@ -15,6 +15,7 @@ Future<List<TaskModel>> fetchTasks() async {
   }
 }
 
+
 Future<void> deleteTask(String id) async {
   final response = await http.delete(
     Uri.parse('http://localhost:3009/reminder/$id'),
@@ -23,3 +24,21 @@ Future<void> deleteTask(String id) async {
     throw Exception('failed to delete the task');
   }
 }
+
+
+  Future<void> createReminder(Map<String, dynamic> taskData) async {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:3009/newReminder'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(taskData),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('successfully sent response: ${response.body}');
+    } else {
+      print('failed to send data: ${response.statusCode}');
+      throw Exception('failed to create task');
+    }
+  }
+
+
+
