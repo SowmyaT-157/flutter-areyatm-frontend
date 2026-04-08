@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text('Task: ${task.task_name}'),
                         Text('Type: ${task.task_type}'),
-                        Text('Time: ${task.time_details}min'),
+                        Text('Time: ${task.time_details}'),
                        
                       ],
                     ),
