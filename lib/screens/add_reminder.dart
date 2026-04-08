@@ -1,5 +1,7 @@
-import 'package:arey_atm/services/tasksServices.dart';
+import 'package:arey_atm/block/task_block.dart';
+import 'package:arey_atm/block/task_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AddReminder extends StatefulWidget {
@@ -76,7 +78,7 @@ class _AddReminderState extends State<AddReminder> {
     };
 
     try {
-      await createReminder(data);
+      context.read<AddTaskBloc>().add(AddTaskEvent(data));
       if (mounted) context.go('/homePage');
     } catch (error) {
       print("Error: $error");
