@@ -20,7 +20,9 @@ class TaskModel {
       id: json['_id']?.toString() ?? '',
       task_name: json['task_name'] ?? '',
       task_type: json['task_type'] ?? '',
-      time_details: json['priority'] ?? '',
+      time_details: json['time_details'] ?? 'not seted',
     );
   }
+
+  
 }
