@@ -1,6 +1,9 @@
+import 'package:arey_atm/block/task_block.dart';
+import 'package:arey_atm/block/task_event.dart';
+import 'package:arey_atm/block/task_state.dart';
 import 'package:arey_atm/model/taskModel.dart';
-import 'package:arey_atm/services/tasksServices.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,8 +14,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void _refresh() {
-    setState(() {});
+  @override
+  void initState() {
+    super.initState();
+    context.read<AddTaskBloc>().add(FetchTasks());
   }
 
   void _showBottomSheet(TaskModel task) {
@@ -32,9 +37,8 @@ class _HomePageState extends State<HomePage> {
               title: const Text("Delete"),
               onTap: () async {
                 try {
-                  await deleteTask(task.id);
+                  context.read<AddTaskBloc>().add(DeleteTaskEvent(task.id));
                   Navigator.pop(context);
-                  _refresh();
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(const SnackBar(content: Text("Task Deleted")));
@@ -57,46 +61,41 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Home Page")),
-      body: FutureBuilder<List<TaskModel>>(
-        future: fetchTasks(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: BlocBuilder<AddTaskBloc, ReminderTaskState>(
+        builder: (context, state) {
+          if (state is TaskLoading)
             return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No tasks available"));
-          }
-
-          final tasks = snapshot.data!;
-          return ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              final task = tasks[index];
-              return GestureDetector(
-                onLongPress: () => _showBottomSheet(task),
-                child: Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 8,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Task: ${task.task_name}'),
-                        Text('Type: ${task.task_type}'),
-                        Text('Time: ${task.time_details}'),
-                       
-                      ],
+          if (state is TaskError) return Center(child: Text(state.message));
+          if (state is TaskLoaded) {
+            final tasks = state.tasks;
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                final task = tasks[index];
+                return GestureDetector(
+                  onLongPress: () => _showBottomSheet(task),
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 8,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Task: ${task.task_name}'),
+                          Text('Type: ${task.task_type}'),
+                          Text('Time: ${task.time_details}'),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          }
+          return const Center(child: Text("givin data"));
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
